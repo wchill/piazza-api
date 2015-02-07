@@ -295,6 +295,40 @@ class PiazzaRPC(object):
         r = self.request(method="user_profile.get_profile")
         return self._handle_error(r, "Could not get user profile.")
 
+#{"method":"content.create","params":{"nid":"i5ehpuo51hc1cy","type":"note","subject":"Test","content":"test","anonymous":"no","client_time":"2/05/15 11:07 PM","status":"active","folders":["other"],"config":{"feed_groups":"i5rgot5kg2b9q,hkvw944sk8r6mh"}}}
+#{"method":"content.create","params":{"nid":"i5ehpuo51hc1cy","type":"question","subject":"test","content":"test","anonymous":"no","client_time":"2/05/15 11:19 PM","status":"active","folders":["other"],"config":{"feed_groups":"i5rgot5kg2b9q,hkvw944sk8r6mh"}}}
+#{"method":"content.create","params":{"nid":"i5ehpuo51hc1cy","cid":"i5t436qbrln3vl","type":"followup","subject":"test","content":"","anonymous":"no"}}
+
+    def add_post(self, subject, content, folders, type="note", anonymous=False, feed_groups=None, nid=None):
+        r = self.request(
+            method="content.create",
+            nid=nid,
+            data=dict(
+                type=type,
+                subject=subject,
+                content=content,
+                anonymous="yes" if anonymous else "no",
+                status="active",
+                folders=folders,
+                config=dict(feed_groups=feed_groups) if feed_groups else dict()
+            )
+        )
+        return self._handle_error(r, "Could not post to Piazza.")
+
+    def add_followup(self, cid, subject, anonymous=False, nid=None):
+        r = self.request(
+            method="content.create",
+            nid=nid,
+            data=dict(
+                type="followup",
+                subject=subject,
+                content="",
+                anonymous="yes" if anonymous else "no",
+                cid=cid
+            )
+        }
+        return self._handle_error(r, "Could not post follow up.")
+
     def request(self, method, data=None, nid=None, nid_key='nid',
                 api_type="logic", return_response=False):
         """Get data from arbitrary Piazza API endpoint `method` in network `nid`

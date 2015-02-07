@@ -105,6 +105,15 @@ class Network(object):
         for cid in cids:
             yield self.get_post(cid)
 
+    def add_question(self, subject, content, folders, anonymous=False, feed_groups=None):
+        return self._rpc.add_post(subject, content, folders, type="question", anonymous=anonymous, feed_groups=feed_groups)
+
+    def add_note(self, subject, content, folders, anonymous=False, feed_groups=None):
+        return self._rpc.add_post(subject, content, folders, type="note", anonymous=anonymous, feed_groups=feed_groups)
+
+    def add_followup(self, cid, subject, anonymous=False):
+        return self._rpc.add_followup(cid, subject, anonymous=anonymous)
+
     #########
     # Users #
     #########
