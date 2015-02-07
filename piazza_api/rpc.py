@@ -326,7 +326,7 @@ class PiazzaRPC(object):
                 anonymous="yes" if anonymous else "no",
                 cid=cid
             )
-        }
+        )
         return self._handle_error(r, "Could not post follow up.")
 
     def request(self, method, data=None, nid=None, nid_key='nid',
